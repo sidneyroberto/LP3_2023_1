@@ -31,5 +31,20 @@ app.get('/soma/:numero1/:numero2', (req, res) => {
   return res.status(400).json({ mensagem: 'Números inválidos' })
 })
 
+app.get('/divisao', (req, res) => {
+  const { numero1, numero2 } = req.query
+  const n1 = Number(numero1)
+  const n2 = Number(numero2)
+
+  if (n2 != 0) {
+    const resultado = n1 / n2
+    return res.status(200).json({ resultado })
+  }
+
+  return res.status(400).json({
+    mensagem: 'Divisor não pode ser zero',
+  })
+})
+
 // Levanta o servidor
 app.listen(3000, () => console.log('Server is running'))

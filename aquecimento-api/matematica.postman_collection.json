@@ -1,0 +1,209 @@
+{
+	"info": {
+		"_postman_id": "c282f829-117f-480c-a2a3-d0e39a357f0a",
+		"name": "Requisições da API de Matemática",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2645049"
+	},
+	"item": [
+		{
+			"name": "Retornar o número do PI",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('deve retornar o valor correto do PI com 4 casas decimais', () => {\r",
+							"    const { pi } = pm.response.json()\r",
+							"    pm.expect(`${pi}`.substring(0, 6)).to.equal('3.1415')\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/pi",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Somar dois números",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('deve somar corretamente dois números', () => {\r",
+							"    const { resultado } = pm.response.json()\r",
+							"    const n1 = pm.collectionVariables.get('numero1')\r",
+							"    const n2 = pm.collectionVariables.get('numero2')\r",
+							"    const resultadoEsperado = n1 + n2\r",
+							"    pm.expect(resultado).to.equal(resultadoEsperado)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set('numero1', 12)\r",
+							"pm.collectionVariables.set('numero2', 28)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/soma/{{numero1}}/{{numero2}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"soma",
+						"{{numero1}}",
+						"{{numero2}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Dividir dois números",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('deve dividir corretamente dois números', () => {\r",
+							"    const { resultado } = pm.response.json()\r",
+							"    const n1 = pm.collectionVariables.get('numero1')\r",
+							"    const n2 = pm.collectionVariables.get('numero2')\r",
+							"    const resultadoEsperado = n1 / n2\r",
+							"    pm.response.to.have.status(200)\r",
+							"    pm.expect(resultado).to.equal(resultadoEsperado)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/divisao?numero1={{numero1}}&numero2={{numero2}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"divisao"
+					],
+					"query": [
+						{
+							"key": "numero1",
+							"value": "{{numero1}}"
+						},
+						{
+							"key": "numero2",
+							"value": "{{numero2}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Dividir um número por zero",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('não deve dividir um número por zero', () => {\r",
+							"    const { mensagem } = pm.response.json()\r",
+							"    pm.response.to.have.status(400)\r",
+							"    pm.expect(mensagem).to.equal('Divisor não pode ser zero')\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/divisao?numero1=12&numero2=0",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"divisao"
+					],
+					"query": [
+						{
+							"key": "numero1",
+							"value": "12"
+						},
+						{
+							"key": "numero2",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "numero1",
+			"value": ""
+		},
+		{
+			"key": "numero2",
+			"value": ""
+		}
+	]
+}
