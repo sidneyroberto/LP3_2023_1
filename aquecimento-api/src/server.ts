@@ -19,5 +19,17 @@ app.get('/pi', (req, res) => {
   return res.status(200).json({ pi: valorPi })
 })
 
+app.get('/soma/:numero1/:numero2', (req, res) => {
+  const { numero1, numero2 } = req.params
+  const n1 = Number(numero1)
+  const n2 = Number(numero2)
+  if (!isNaN(n1) && !isNaN(n2)) {
+    const resultado = n1 + n2
+    return res.status(200).json({ resultado })
+  }
+
+  return res.status(400).json({ mensagem: 'Números inválidos' })
+})
+
 // Levanta o servidor
 app.listen(3000, () => console.log('Server is running'))
