@@ -15,7 +15,7 @@ const events = [
   'SIGINT',
   'SIGUSR1',
   'SIGUSR2',
-  'uncaughtException',
+  //'uncaughtException',
   'SIGTERM',
 ]
 
