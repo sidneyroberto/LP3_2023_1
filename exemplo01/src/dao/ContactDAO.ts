@@ -16,4 +16,15 @@ export class ContactDAO {
 
     return contacts
   }
+
+  async findByBirthdayPeriod(start: Date, end: Date) {
+    const contacts = await ContactModel.find<Contact>({
+      birthday: {
+        $gte: start,
+        $lte: end,
+      },
+    })
+
+    return contacts
+  }
 }

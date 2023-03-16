@@ -22,3 +22,6 @@ contactsRouter.post('/', (req, res) => contactCtrl.save(req, res))
 contactsRouter.get('/name/:name', (req, res) =>
   contactCtrl.findByName(req, res)
 )
+contactsRouter.get('/birthday', (req, res) =>
+  contactCtrl.findByBirthdayPeriod(req, res)
+)

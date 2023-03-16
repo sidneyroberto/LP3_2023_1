@@ -293,6 +293,106 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "FInd contacts by birthday period",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('should retrieve correct contacts by birthday period', () => {\r",
+							"    pm.response.to.have.status(200)\r",
+							"    const response = pm.response.json()\r",
+							"    const { contacts } = response\r",
+							"    pm.expect(contacts.length).to.greaterThan(0)\r",
+							"    const start = pm.collectionVariables.get('startDate')\r",
+							"    const end = pm.collectionVariables.get('endDate')\r",
+							"    const startDate = new Date(start)\r",
+							"    const endDate = new Date(end)\r",
+							"\r",
+							"    contacts.forEach((c) => {\r",
+							"        const { birthday } = c\r",
+							"        const birthdayDate = new Date(birthday)\r",
+							"        const verification = birthdayDate >= startDate && birthdayDate <= endDate\r",
+							"        pm.expect(verification).to.equal(true)\r",
+							"    })\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/contacts/birthday?start={{startDate}}&end={{endDate}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"contacts",
+						"birthday"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "{{startDate}}"
+						},
+						{
+							"key": "end",
+							"value": "{{endDate}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FInd contacts with birthday period start date greater than end date",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('should not retrieve contacts when start date is greater than end date', () => {\r",
+							"    pm.response.to.have.status(400)\r",
+							"    const response = pm.response.json()\r",
+							"    const { errorMessages } = response\r",
+							"    const message = errorMessages[0]\r",
+							"    pm.expect(message).to.equal('Start date cannot be greater than end date')\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/contacts/birthday?start={{endDate}}&end={{startDate}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"contacts",
+						"birthday"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "{{endDate}}"
+						},
+						{
+							"key": "end",
+							"value": "{{startDate}}"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
@@ -329,6 +429,16 @@
 		{
 			"key": "contactNameSubStr",
 			"value": "OUS",
+			"type": "string"
+		},
+		{
+			"key": "startDate",
+			"value": "1990-01-01",
+			"type": "string"
+		},
+		{
+			"key": "endDate",
+			"value": "2010-12-31",
 			"type": "string"
 		}
 	]
