@@ -28,4 +28,12 @@ export class ContactController {
 
     return res.status(400).json({ errorMessages })
   }
+
+  async findByName(req: Request, res: Response) {
+    const { name } = req.params
+
+    const contacts = await this._contactDAO.findByName(name)
+
+    return res.status(200).json({ contacts })
+  }
 }

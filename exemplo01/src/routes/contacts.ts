@@ -19,3 +19,6 @@ const contactCtrl = new ContactController()
  * contactsRouter.post('/', contactCtrl.save.bind(contactCtrl))
  */
 contactsRouter.post('/', (req, res) => contactCtrl.save(req, res))
+contactsRouter.get('/name/:name', (req, res) =>
+  contactCtrl.findByName(req, res)
+)
