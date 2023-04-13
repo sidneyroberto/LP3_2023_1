@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import { validateContactInputs, ContactModel } from '../domains/ContactModel'
 import { ContactDAO } from '../dao/ContactDAO'
+import { ContactModel, validateContactInputs } from '../domains/ContactModel'
 
 export class ContactController {
   private _contactDAO: ContactDAO

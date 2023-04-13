@@ -1,5 +1,5 @@
-import { Document, Schema, model } from 'mongoose'
 import EmailValidator from 'email-validator'
+import { Document, Schema, model } from 'mongoose'
 
 export interface Contact extends Document {
   name: string
@@ -31,7 +31,7 @@ export const validateContactInputs = (contactObj: any) => {
   }
 
   // (99) 99999-9999
-  if (!phone.match(/^\(\d{2}\).\d{5}-\d{4}$/)) {
+  if (!phone.match(/^\(\d{2}\)\s\d{5}-\d{4}$/)) {
     errorMessages.push('Phone must have following pattern: (00) 00000-0000')
   }
 
