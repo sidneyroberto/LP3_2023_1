@@ -8,29 +8,22 @@ describe('Tests over /contacts path', () => {
   beforeEach(() => {
     cy.task('clearContacts')
 
-    cy.fixture('contact').then((contact) => {
-      this.contact = contact
-    })
-
-    cy.fixture('invalidNameContact').then((contact) => {
-      this.invalidNameContact = contact
-    })
-
-    cy.fixture('invalidEmailContact').then((contact) => {
-      this.invalidEmailContact = contact
-    })
-
-    cy.fixture('invalidPhoneContact').then((contact) => {
-      this.invalidPhoneContact = contact
-    })
-
-    cy.fixture('invalidBirthdayContact').then((contact) => {
-      this.invalidBirthdayContact = contact
+    this.fixtures = new Map<string, any>()
+    ;[
+      'contact',
+      'invalidNameContact',
+      'invalidEmailContact',
+      'invalidPhoneContact',
+      'invalidBirthdayContact',
+    ].forEach((name) => {
+      cy.fixture(name).then((value) => {
+        this.fixtures.set(name, value)
+      })
     })
   })
 
   it('should save a valid contact', () => {
-    requestOptions.body = this.contact
+    requestOptions.body = this.fixtures.get('contact')
 
     cy.request(requestOptions).then(({ body, status }) => {
       expect(status).to.equal(201)
@@ -40,7 +33,7 @@ describe('Tests over /contacts path', () => {
   })
 
   it('should not save a contact with invalid name', () => {
-    requestOptions.body = this.invalidNameContact
+    requestOptions.body = this.fixtures.get('invalidNameContact')
 
     cy.request(requestOptions).then(({ body, status }) => {
       expect(status).to.equal(400)
@@ -50,7 +43,7 @@ describe('Tests over /contacts path', () => {
   })
 
   it('should not save a contact with invalid email', () => {
-    requestOptions.body = this.invalidEmailContact
+    requestOptions.body = this.fixtures.get('invalidEmailContact')
 
     cy.request(requestOptions).then(({ body, status }) => {
       expect(status).to.equal(400)
@@ -60,7 +53,7 @@ describe('Tests over /contacts path', () => {
   })
 
   it('should not save a contact with invalid phone', () => {
-    requestOptions.body = this.invalidPhoneContact
+    requestOptions.body = this.fixtures.get('invalidPhoneContact')
 
     cy.request(requestOptions).then(({ body, status }) => {
       expect(status).to.equal(400)
@@ -72,7 +65,7 @@ describe('Tests over /contacts path', () => {
   })
 
   it('should not save a contact with invalid birthday', () => {
-    requestOptions.body = this.invalidBirthdayContact
+    requestOptions.body = this.fixtures.get('invalidBirthdayContact')
 
     cy.request(requestOptions).then(({ body, status }) => {
       expect(status).to.equal(400)
