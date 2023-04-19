@@ -5,9 +5,7 @@ let requestOptions: Partial<Cypress.RequestOptions> = {
 }
 
 describe('Tests over /contacts path', () => {
-  beforeEach(() => {
-    cy.task('clearContacts')
-
+  before(() => {
     this.fixtures = new Map<string, any>()
     ;[
       'contact',
@@ -20,6 +18,10 @@ describe('Tests over /contacts path', () => {
         this.fixtures.set(name, value)
       })
     })
+  })
+
+  beforeEach(() => {
+    cy.task('clearContacts')
   })
 
   it('should save a valid contact', () => {
