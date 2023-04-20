@@ -75,4 +75,51 @@ describe('Tests over /contacts path', () => {
       expect(errorMessages[0]).to.equal('Birthday must be previous to today')
     })
   })
+
+  it('should find contacts by name', () => {
+    const lastname = 'sousa'
+    const populationSize = 10
+
+    cy.task('populateContacts', {
+      lastname,
+      populationSize,
+    })
+
+    requestOptions.method = 'GET'
+    requestOptions.url = `/contacts/name/${lastname}`
+    cy.request(requestOptions).then(({ body, status }) => {
+      expect(status).to.equal(200)
+      const { contacts } = body
+      expect(contacts.length).to.gte(populationSize / 2)
+
+      contacts.forEach((c: any) => expect(c.name).to.contain(lastname))
+    })
+  })
+
+  it('should retrieve correct contacts by birtday period', () => {
+    const startDateStr = '1990-08-13'
+    const endDateStr = '2000-08-13'
+    const startDate = new Date(startDateStr)
+    const endDate = new Date(endDateStr)
+    const populationSize = 10
+
+    cy.task('populateContacts', {
+      startDate,
+      endDate,
+      populationSize,
+    })
+
+    requestOptions.method = 'GET'
+    requestOptions.url = `/contacts/birthday?start=${startDateStr}&end=${endDateStr}`
+    cy.request(requestOptions).then(({ status, body }) => {
+      expect(status).to.equal(200)
+      const { contacts } = body
+      expect(contacts.length).to.gte(populationSize / 2)
+
+      contacts.forEach((c: any) => {
+        expect(new Date(c.birthday)).to.gte(startDate)
+        expect(new Date(c.birthday)).to.lte(endDate)
+      })
+    })
+  })
 })
