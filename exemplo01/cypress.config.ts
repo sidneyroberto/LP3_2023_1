@@ -31,27 +31,20 @@ export default defineConfig({
         },
 
         async populateContacts({
-          lastname,
-          populationSize,
-          startDate,
-          endDate,
+          lastname = 'Tester',
+          populationSize = 2,
+          startDate = new Date('2010-10-10'),
+          endDate = new Date('2010-10-10'),
         }: PopulateType) {
-          const size = populationSize < 2 ? 2 : populationSize
-          const contactLastName = lastname ? lastname : 'Tester'
-          const contactStartDate = startDate
-            ? startDate
-            : new Date('2010-10-10')
-          const contactEndDate = endDate ? endDate : new Date('2010-10-10')
-
-          for (let i = 0; i < size; i++) {
+          for (let i = 0; i < populationSize; i++) {
             const name =
-              i < size / 2
-                ? faker.name.fullName({ lastName: contactLastName })
+              i < populationSize / 2
+                ? faker.name.fullName({ lastName: lastname })
                 : faker.name.fullName()
 
             const birthday =
-              i < size / 2
-                ? faker.date.between(contactStartDate, contactEndDate)
+              i < populationSize / 2
+                ? faker.date.between(startDate, endDate)
                 : faker.date.birthdate()
 
             const contact = new ContactModel({
