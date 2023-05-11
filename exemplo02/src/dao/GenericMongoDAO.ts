@@ -8,7 +8,7 @@ import {
 } from 'mongodb'
 import { IGenericDAO } from './IGenericDAO'
 
-export class GenericDAO<T extends Document> implements IGenericDAO<T> {
+export class GenericMongoDAO<T extends Document> implements IGenericDAO<T> {
   private _collection: Collection<T>
 
   constructor(db: Db, collectionName: string) {
