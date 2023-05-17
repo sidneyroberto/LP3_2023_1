@@ -6,9 +6,9 @@ import {
   ObjectId,
   OptionalUnlessRequiredId,
 } from 'mongodb'
-import { IGenericDAO } from './IGenericDAO'
+import { IGenericDAO } from '../IGenericDAO'
 
-export class GenericMongoDAO<T extends Document> implements IGenericDAO<T> {
+export class GenericDAO<T extends Document> implements IGenericDAO<T> {
   private _collection: Collection<T>
 
   constructor(db: Db, collectionName: string) {
