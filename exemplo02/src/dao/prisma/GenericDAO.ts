@@ -1,7 +1,7 @@
 import { IGenericDAO } from '../IGenericDAO'
 
 export class GenericDAO<T> implements IGenericDAO<T> {
-  private _model: any
+  protected _model: any
 
   async create(obj: T): Promise<string> {
     const savedObj = await this._model.create({ data: obj })
@@ -16,18 +16,36 @@ export class GenericDAO<T> implements IGenericDAO<T> {
       data: obj,
     })
 
-    return updatedObj != null && updatedObj != undefined
+    return !!updatedObj
   }
 
-  delete(id: string): Promise<boolean> {
-    throw new Error('Method not implemented.')
+  async delete(id: string): Promise<boolean> {
+    const deletedObj = await this._model.delete({
+      where: {
+        id: id,
+      },
+    })
+
+    return !!deletedObj
   }
 
-  findOne(id: string): Promise<T> {
-    throw new Error('Method not implemented.')
+  async findOne(id: string): Promise<T> {
+    const obj = await this._model.findUnique({
+      where: {
+        id: id,
+      },
+    })
+
+    return obj
   }
 
-  find(criteria: any, options?: any): Promise<T[]> {
-    throw new Error('Method not implemented.')
+  async find(criteria: any, options?: any): Promise<T[]> {
+    const opts = options || {}
+    const results = await this._model.findMany({
+      where: criteria,
+      ...opts,
+    })
+
+    return results
   }
 }

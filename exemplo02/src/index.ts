@@ -1,14 +1,11 @@
-import { MongoClient } from 'mongodb'
+import { PrismaClient } from '@prisma/client'
 
-import { UserDAO } from './dao/UserDAO'
+import { UserDAO } from './dao/prisma/UserDAO'
 import { User } from './models/User'
 
 const run = async () => {
-  const connection = await MongoClient.connect('mongodb://localhost')
-
-  const db = connection.db('users_management')
-
-  const dao = new UserDAO(db)
+  const client = new PrismaClient()
+  const dao = new UserDAO(client)
 
   const user1 = new User(
     'Dwight Schrute',
@@ -30,10 +27,11 @@ const run = async () => {
   user = await dao.findOne(id)
   console.log(user)
 
+  // select * from user where lower(name) like lower('%dwight%')
   const users = await dao.find({
     name: {
-      $regex: 'dwight',
-      $options: 'i',
+      contains: 'dwight',
+      mode: 'insensitive',
     },
   })
   console.log(users)
