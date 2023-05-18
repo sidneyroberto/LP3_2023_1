@@ -1,5 +1,8 @@
+import { injectable } from 'inversify'
+
 import { IGenericDAO } from '../IGenericDAO'
 
+@injectable()
 export class GenericDAO<T> implements IGenericDAO<T> {
   protected _model: any
 

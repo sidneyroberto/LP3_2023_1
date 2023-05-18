@@ -1,19 +1,17 @@
+import { injectable } from 'inversify'
 import {
   Collection,
-  Db,
   Document,
   Filter,
   ObjectId,
   OptionalUnlessRequiredId,
 } from 'mongodb'
+
 import { IGenericDAO } from '../IGenericDAO'
 
+@injectable()
 export class GenericDAO<T extends Document> implements IGenericDAO<T> {
-  private _collection: Collection<T>
-
-  constructor(db: Db, collectionName: string) {
-    this._collection = db.collection<T>(collectionName)
-  }
+  protected _collection: Collection<T>
 
   async create(obj: T): Promise<string> {
     const result = await this._collection.insertOne(

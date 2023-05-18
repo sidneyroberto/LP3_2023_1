@@ -1,11 +1,13 @@
-import { PrismaClient } from '@prisma/client'
+import 'reflect-metadata'
 
-import { UserDAO } from './dao/prisma/UserDAO'
+import { IUserDAO } from './dao/IUserDAO'
+import { getContainer } from './injections/container'
+import { TYPES } from './injections/types'
 import { User } from './models/User'
 
 const run = async () => {
-  const client = new PrismaClient()
-  const dao = new UserDAO(client)
+  const container = await getContainer()
+  const dao = container.get<IUserDAO>(TYPES.IUserDAO)
 
   const user1 = new User(
     'Dwight Schrute',
@@ -27,17 +29,11 @@ const run = async () => {
   user = await dao.findOne(id)
   console.log(user)
 
-  // select * from user where lower(name) like lower('%dwight%')
-  const users = await dao.find({
-    name: {
-      contains: 'dwight',
-      mode: 'insensitive',
-    },
-  })
+  const users = await dao.findByName('dwight')
   console.log(users)
 
-  //   const deleted = await dao.delete(id)
-  //   console.log(`Removido: ${deleted}`)
+  const deleted = await dao.delete(id)
+  console.log(`Removido: ${deleted}`)
 
   console.log('Mal feito desfeito')
 }
